@@ -236,7 +236,14 @@ class OAuthPlugin : CDVPlugin, SFSafariViewControllerDelegate, ASWebAuthenticati
        self.authSystem = nil
     }
 
-    @available(iOS 13.0, *)
+    // ASWebAuthenticationPresentationContextProviding's
+    // presentationAnchor(for:) requirement is annotated @available(iOS 12.0,
+    // *) — implementations must match. The previous @available(iOS 13.0, *)
+    // was more restrictive than the protocol's own annotation, which newer
+    // Swift compilers reject ("protocol requires X to be available in iOS
+    // 12.0 and newer"). The deployment target is iOS 12.0 so this is a
+    // no-op at runtime.
+    @available(iOS 12.0, *)
     func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
         return self.viewController.view.window ?? ASPresentationAnchor()
     }
